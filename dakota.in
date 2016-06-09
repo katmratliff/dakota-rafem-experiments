@@ -1,0 +1,31 @@
+environment
+  tabular_graphics_data
+    tabular_graphics_file = 'dakota.dat'
+
+method
+  multidim_parameter_study
+    partitions = 10 10
+
+variables
+  continuous_design = 2
+    descriptors    'alpha'    'dx'
+    lower_bounds     1.        1.
+    upper_bounds    10.       10.
+
+interface
+	fork,
+	  asynchronous 
+
+	  # this must agree with the qsub and driver script files
+	  evaluation_concurrency = 128
+
+	analysis_driver = 'heat_driver.sh'
+  parameters_file = 'params.in'
+  results_file    = 'results.out'
+  file_tag
+
+responses
+  response_functions = 2
+  response_descriptors = 'max_temperature' 'mean_temperature'
+  no_gradients
+  no_hessians
