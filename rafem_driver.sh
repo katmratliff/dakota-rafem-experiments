@@ -12,10 +12,8 @@ RUN_APPLICATION="/home/kara5380/anaconda/bin/python run_model.py $results_file"
 # Stage the simulation in the workdir
 workdir=xim.${sim_id}
 mkdir ${workdir} && cd ${workdir}
-cp ${TOPDIR}/run_heat.py .
 cp ${TOPDIR}/${params_file} .
-# not sure what to do with below line since values are changing in run_model.py?
-dprepro ${params_file} ${TOPDIR}/heat.yaml.template heat.yaml
+dprepro ${params_file} ${TOPDIR}run_model.py run_model.py
 
 host_num=$(( (sim_id - 1) % N_PROCS + 1))
 sed -n "${host_num}p" $PBS_NODEFILE > machinefile
