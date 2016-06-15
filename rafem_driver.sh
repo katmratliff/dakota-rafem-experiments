@@ -7,13 +7,14 @@ sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[
 TOPDIR=$(pwd)
 MPIRUN=/opt/openmpi/bin/mpirun
 N_PROCS=$PBS_NP
-RUN_APPLICATION="/home/huttone/anaconda/bin/python run_heat.py heat.yaml $results_file"
+RUN_APPLICATION="/home/kara5380/anaconda/bin/python run_model.py $results_file"
 
 # Stage the simulation in the workdir
 workdir=xim.${sim_id}
 mkdir ${workdir} && cd ${workdir}
 cp ${TOPDIR}/run_heat.py .
 cp ${TOPDIR}/${params_file} .
+# not sure what to do with below line since values are changing in run_model.py?
 dprepro ${params_file} ${TOPDIR}/heat.yaml.template heat.yaml
 
 host_num=$(( (sim_id - 1) % N_PROCS + 1))
