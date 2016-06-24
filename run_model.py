@@ -1,13 +1,12 @@
-
 #!/usr/bin/python
-# %matplotlib inline
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import inspect, os
-import pudb
 #from rafem.riverbmi import BmiRiverModule
 
-N_DAYS = 5 * 365
+N_DAYS = 100
 Save_Daily_Timesteps = 1
 Save_Yearly_Timesteps = 0
 Save_Fluxes = 1
@@ -41,8 +40,8 @@ waves = Waves()
 
 cem.setup('_run_cem', number_of_cols=200, number_of_rows=120, grid_spacing=100.)
 raf.setup('_run_rafem', number_of_columns=200, number_of_rows=120, row_spacing=0.1,
-          column_spacing=0.1, rate_of_sea_level_rise=0.00, channel_discharge=10.,
-          upstream_elevation=5.)
+          column_spacing=0.1, random_seed=623, rate_of_sea_level_rise=0.00,
+          channel_discharge=10., upstream_elevation=5.)
 
 cem.initialize('_run_cem/cem.txt')
 raf.initialize('_run_rafem/input.yaml')
@@ -58,6 +57,8 @@ waves.set_value('sea_shoreline_wave~incoming~deepwater__ashton_et_al_approach_an
 waves.set_value('sea_shoreline_wave~incoming~deepwater__ashton_et_al_approach_angle_highness_parameter', {U})
 cem.set_value("sea_surface_water_wave__height", {H})
 cem.set_value("sea_surface_water_wave__period", 9.)
+
+### set CEM wave angle if not updating waves ###
 #cem.set_value("sea_surface_water_wave__azimuth_angle_of_opposite_of_phase_velocity", 0. * np.pi / 180.)
 
 grid_id = cem.get_var_grid('land_surface__elevation')
@@ -73,8 +74,6 @@ riv_y = raf.get_value('channel_centerline__y_coordinate')/1000
 
 qs = np.zeros_like(z0)
 flux_array = np.zeros(2, dtype=np.float)
-
-# np.random.seed(1991)
 
 RIVER_WIDTH = dict(raf.parameters)['channel_width'] # Convert unit-width flux to flux
 RHO_SED = 2650. # Used to convert volume flux to mass flux
@@ -93,8 +92,8 @@ if Save_Daily_Timesteps or Save_Yearly_Timesteps:
         os.mkdir("output_data_waves")
     # if not os.path.exists("output_data_waves/elev_grid"):
     #     os.mkdir("output_data_waves/elev_grid")
-    # if not os.path.exists("output_data_waves/riv_course"):
-        # os.mkdir("output_data_waves/riv_course")
+    if not os.path.exists("output_data_waves/riv_course"):
+        os.mkdir("output_data_waves/riv_course")
     # if not os.path.exists("output_data_waves/riv_profile"):
         # os.mkdir("output_data_waves/riv_profile")
     if not os.path.exists("output_data_waves/elev_figs"):
@@ -120,8 +119,6 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
     if Save_Fluxes:
         with open('fluxes.out','a') as file:
             file.write("%.2f %.5f \n" % (time, raf_qs[0] * RIVER_WIDTH * RHO_SED))
-
-    # flux_array = np.vstack([flux_array, [(time, raf_qs[0] * RIVER_WIDTH * RHO_SED)]])
     
     cem.set_value('land_surface_water_sediment~bedload__mass_flow_rate', qs)
 
@@ -145,9 +142,6 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
                 mouth_cell_count += 1
             else:
                 raf_z[riv_j[k], riv_i[k]] = 1
-
-    # save grid passed to cem
-    # np.savetxt('output_data_waves/cem_elev/cem_elev_'+str("%.3f" % nyears)+'.out',raf_z,fmt='%.5f')
 
     raf_z.reshape(shape[0]*shape[1],)
     cem.set_value('land_surface__elevation', raf_z)
@@ -196,15 +190,13 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
         riv_right[riv_right < sea_level] = sea_level
         Tcf_time = time/Tcf
 
-
-
         ### SAVE DAILY TIMESTEPS ###
         ##########################################################################################
         if Save_Daily_Timesteps == 1:
 
             # np.savetxt('output_data_waves/elev_grid/elev_'+str("%.3f" % nyears)+'.out',z,fmt='%.5f')
             np.savetxt('output_data_waves/rel_elev/rel_elev_'+str("%i" % time)+'.out',rel_z,fmt='%.5f')
-            # np.savetxt('output_data_waves/riv_course/riv_'+str("%i" % time)+'.out',zip(x,y),fmt='%i')
+            np.savetxt('output_data_waves/riv_course/riv_'+str("%i" % time)+'.out',zip(x,y),fmt='%i')
             # np.savetxt('output_data_waves/riv_profile/prof_'+str("%i" % time)+'.out',real_prof,fmt='%.5f')
 
             # save figures
@@ -255,5 +247,3 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
             plt.savefig('output_data_waves/prof_figs/prof_fig_'+str(time/save_int)+'.png')
             plt.close(p)
         ##########################################################################################
-
-# np.savetxt('output_data_waves/fluxes.out',flux_array,fmt='%i,%.5f')
