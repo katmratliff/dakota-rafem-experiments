@@ -25,6 +25,7 @@ interface
   file_tag
 
 responses
-  response_functions = 0
+  response_functions = 1
+  response_descriptors = 'sea_level'
   no_gradients
   no_hessians
