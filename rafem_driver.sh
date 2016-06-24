@@ -13,7 +13,7 @@ RUN_APPLICATION="/home/kara5380/anaconda/bin/python run_model.py $results_file"
 workdir=xim.${sim_id}
 mkdir ${workdir} && cd ${workdir}
 cp ${TOPDIR}/${params_file} .
-dprepro ${params_file} ${TOPDIR}run_model.py run_model.py
+dprepro ${params_file} ${TOPDIR}/run_model.py run_model.py
 
 host_num=$(( (sim_id - 1) % N_PROCS + 1))
 sed -n "${host_num}p" $PBS_NODEFILE > machinefile
