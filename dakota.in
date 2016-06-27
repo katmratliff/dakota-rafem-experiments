@@ -4,13 +4,13 @@ environment
 
 method
   multidim_parameter_study
-    partitions = 8 8
+    partitions = 2 2
 
 variables
   continuous_design = 2
     descriptors     'U'       'H'
     lower_bounds    0.1       0.1
-    upper_bounds    0.8       0.8
+    upper_bounds    0.5       0.5
 
 interface
 	fork,
