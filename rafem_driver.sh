@@ -7,7 +7,7 @@ sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[
 TOPDIR=$(pwd)
 MPIRUN=/opt/openmpi/bin/mpirun
 N_PROCS=$PBS_NP
-RUN_APPLICATION="/home/kara5380/anaconda/bin/python run_model.py $results_file"
+RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python run_model.py $results_file"
 
 # Stage the simulation in the workdir
 workdir=xim.${sim_id}
