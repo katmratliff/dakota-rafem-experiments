@@ -2,11 +2,8 @@
 
 export PATH=/home/kara5380/py-csdms/conda/bin:$PATH
 
-## not sure if below is correct? (dont' have params input file)
-# params_file=$1
-# results_file=$2
-results_file=$1
-
+params_file=$1
+results_file=$2
 sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[0-9]+
 
 TOPDIR=$(pwd)
