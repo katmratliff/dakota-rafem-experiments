@@ -247,3 +247,6 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
             plt.savefig('output_data_waves/prof_figs/prof_fig_'+str(time/save_int)+'.png')
             plt.close(p)
         ##########################################################################################
+
+with open('results.out','w') as file:
+    file.write("%5f" % sea_level)
