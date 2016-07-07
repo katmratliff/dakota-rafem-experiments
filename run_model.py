@@ -248,5 +248,5 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
             plt.close(p)
         ##########################################################################################
 
-with open('results.out','w') as file:
-    file.write("%5f" % sea_level)
+# with open('results.out','w') as file:
+#     file.write("%5f" % sea_level)
