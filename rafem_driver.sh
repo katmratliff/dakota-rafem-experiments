@@ -22,5 +22,5 @@ sed -n "${host_num}p" $PBS_NODEFILE > machinefile
 
 $MPIRUN -np 1 -machinefile ./machinefile $RUN_APPLICATION
 
-cp $results_file ${TOPDIR}
+# cp $results_file ${TOPDIR}
 cd ${TOPDIR}
