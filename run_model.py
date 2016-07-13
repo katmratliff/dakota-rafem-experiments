@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import sys
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -6,7 +7,7 @@ import numpy as np
 import inspect, os
 #from rafem.riverbmi import BmiRiverModule
 
-N_DAYS = 10
+N_DAYS = 50
 Save_Daily_Timesteps = 1
 Save_Yearly_Timesteps = 0
 Save_Fluxes = 1
@@ -248,4 +249,4 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
             plt.close(p)
         ##########################################################################################
 
-np.savetxt('results.out',sea_level,fmt='%.5f')
+np.savetxt(sys.argv[1], sea_level, fmt='%.5f')
