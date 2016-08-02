@@ -34,7 +34,7 @@ setup()
 
 	cd ${TMPDIR} && \
 	mkdir -p ${SIM_DIR} && \
-	cp $PBS_O_WORKDIR/* ${SIM_DIR}
+	cp ${PBS_O_WORKDIR}/* ${SIM_DIR}
 
 	##cp ${INPUT_FILES}/* ${SIM_DIR}
 }
