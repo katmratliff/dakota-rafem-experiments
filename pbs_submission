@@ -22,7 +22,7 @@ SIM_NO=${PBS_ARRAYID}
 
 SIM_DIR=modelsim${SIM_NO}
 
-## INPUT_FILES=${INPUT_DIR}/sim${SIM_NO} ## Save for when we need input files
+INPUT_FILES=${INPUT_DIR}/sim${SIM_NO}
 
 OUTPUT_FILES=${OUTPUT_DIR}/sim${SIM_NO}
 
@@ -34,9 +34,8 @@ setup()
 
 	cd ${TMPDIR} && \
 	mkdir -p ${SIM_DIR} && \
-	cp ${PBS_O_WORKDIR}/* ${SIM_DIR}
-
-	##cp ${INPUT_FILES}/* ${SIM_DIR}
+	## cp ${PBS_O_WORKDIR}/* ${SIM_DIR}
+	cp ${INPUT_FILES}/* ${SIM_DIR}
 }
 
 run()
