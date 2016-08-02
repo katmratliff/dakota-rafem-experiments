@@ -2,10 +2,62 @@
 #PBS -l nodes=4:ppn=4
 #PBS -N dakota_rafem_cem
 
+## Send email when the job is aborted, started, or stopped
+#PBS -m abe
+
+## Send email here
+#PBS -M k.ratliff@duke.edu
+
 export MPI=/opt/openmpi
 export DAKOTA=/usr/local/dakota
 
 export PATH=$DAKOTA/bin:$MPI/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DAKOTA/bin:$DAKOTA/lib
 
-cd $PBS_O_WORKDIR && $DAKOTA/bin/dakota -i dakota.in
+## INPUT_DIR=/kara5380/model_runs/ ## Save for when we need input files
+
+OUTPUT_DIR=/scratch/kara5380/model_output 
+
+SIM_NO=${PBS_ARRAYID}
+
+SIM_DIR=modelsim${SIM_NO}
+
+## INPUT_FILES=${INPUT_DIR}/sim${SIM_NO} ## Save for when we need input files
+
+OUTPUT_FILES=${OUTPUT_DIR}/sim${SIM_NO}
+
+setup()
+{
+	echo "Running Simulation ${SIM_NO}"
+	echo "Transferring input to compute node..."
+	echo "${INPUT_FILES} -> ${SIM_DIR}"
+
+	cd ${TMPDIR} && \
+	mkdir -p ${SIM_DIR} ## && \
+	## cp ${INPUT_FILES}/* ${SIM_DIR}
+}
+
+run()
+{
+  echo "Running program in ${SIM_DIR} on node ${PBS_NODENUM}..."
+
+  cd ${SIM_DIR} && \
+  $DAKOTA/bin/dakota -i dakota.in
+}
+
+teardown()
+{
+	echo "Transferring output to ${OUTPUT_FILES} and cleaning up..."
+
+	mkdir -p ${OUTPUT_DIR} && \
+	cd ${TMPDIR} && \
+	tar --create --gzip --file ${OUTPUT_FILES}/${SIM_DIR}.tar.gz ${SIM_DIR} && \
+	rm -r ${SIM_DIR}
+
+	echo "Teardown complete. Simulation complete."
+}
+
+setup
+run
+teardown
+
