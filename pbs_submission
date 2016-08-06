@@ -14,51 +14,13 @@ export DAKOTA=/usr/local/dakota
 export PATH=$DAKOTA/bin:$MPI/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DAKOTA/bin:$DAKOTA/lib
 
-INPUT_DIR=/kara5380/test-dakota
+OUTPUT_DIR=/scratch/kara5380/model_output
 
-OUTPUT_DIR=/scratch/kara5380/model_output 
+echo "Copy input to compute node..."
+cd ${TMPDIR} && cp -r ${PBS_O_WORKDIR}/* .
 
-SIM_NO=${PBS_ARRAYID}
+echo "Run Dakota on in the temporary location."
+cd ${TMPDIR} && $DAKOTA/bin/dakota -i dakota.in
 
-SIM_DIR=modelsim${SIM_NO}
-
-## INPUT_FILES=${INPUT_DIR}/sim${SIM_NO} ## Save for when we need input files
-
-OUTPUT_FILES=${OUTPUT_DIR}/sim${SIM_NO}
-
-setup()
-{
-	echo "Running Simulation ${SIM_NO}"
-	echo "Transferring input to compute node..."
-	echo "${INPUT_FILES} -> ${SIM_DIR}"
-
-	cd ${TMPDIR} && \
-	mkdir -p ${SIM_DIR} && \
-	cp ${PBS_O_WORKDIR}/* ${SIM_DIR}
-
-	##cp ${INPUT_FILES}/* ${SIM_DIR}
-}
-
-run()
-{
-  echo "Running program in ${SIM_DIR} on node ${PBS_NODENUM}..."
-
-  cd ${SIM_DIR} && \
-  $DAKOTA/bin/dakota -i dakota.in
-}
-
-teardown()
-{
-	echo "Transferring output to ${OUTPUT_FILES} and cleaning up..."
-
-	mkdir -p ${OUTPUT_DIR} && \
-	cd ${TMPDIR} && \
-	tar --create --gzip --file ${OUTPUT_FILES}/${SIM_DIR}.tar.gz ${SIM_DIR} && \
-	rm -r ${SIM_DIR}
-
-	echo "Teardown complete. Simulation complete."
-}
-
-setup
-run
-teardown
+echo "Copy everything back to the head node."
+mkdir -p ${OUTPUT_DIR} && cp -r ${TMPDIR} ${OUTPUT_DIR}
