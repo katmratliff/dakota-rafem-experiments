@@ -6,7 +6,7 @@ params_file=$1
 results_file=$2
 sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[0-9]+
 
-TOPDIR=$(pwd)
+TOPDIR=${TMPDIR}
 MPIRUN=/opt/openmpi/bin/mpirun
 N_PROCS=$PBS_NP
 RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python run_model.py $results_file"
