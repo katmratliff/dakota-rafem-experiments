@@ -15,12 +15,14 @@ export PATH=$DAKOTA/bin:$MPI/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DAKOTA/bin:$DAKOTA/lib
 
 OUTPUT_DIR=/scratch/kara5380/model_output
+RUN_DIR=/scratch/kara5380/run_files
 
 echo "Copy input to compute node..."
-cd ${TMPDIR} && cp -r ${PBS_O_WORKDIR}/* .
+mkdir -p ${RUN_DIR}
+cd ${RUN_DIR} && cp -r ${PBS_O_WORKDIR}/* .
 
 echo "Run Dakota on in the temporary location."
-cd ${TMPDIR} && $DAKOTA/bin/dakota -i dakota.in
+cd ${RUN_DIR} && $DAKOTA/bin/dakota -i dakota.in
 
 echo "Copy everything back to the head node."
-mkdir -p ${OUTPUT_DIR} && cp -r ${TMPDIR} ${OUTPUT_DIR}
+mkdir -p ${OUTPUT_DIR} && cp -r ${RUN_DIR} ${OUTPUT_DIR}
