@@ -14,8 +14,9 @@ export DAKOTA=/usr/local/dakota
 export PATH=$DAKOTA/bin:$MPI/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DAKOTA/bin:$DAKOTA/lib
 
-OUTPUT_DIR=/scratch/kara5380/model_output
-RUN_DIR=/scratch/kara5380/run_files
+RUN_DIR=${TMPDIR}/model.${PBS_JOBID}
+
+OUTPUT_DIR=/scratch/kara5380/model_output.${PBS_JOBID}
 
 echo "Copy input to compute node..."
 mkdir -p ${RUN_DIR}
