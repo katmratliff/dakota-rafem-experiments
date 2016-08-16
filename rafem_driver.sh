@@ -30,10 +30,10 @@ ${CP} -r ${workdir}.stage ${workdir} && rm -rf ${workdir}.stage
 
 RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python ${workdir}/run_model.py ${workdir}/$results_file"
 
-$MPIRUN -np 1 -machinefile ./machinefile $RUN_APPLICATION
+cd ${TMPDIR} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
 
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
-${CP} -g ${workdir}/$results_file ${TOPDIR}
+# ${CP} -g ${workdir}/$results_file ${TOPDIR}
 # cp ${workdir}/$results_file ${TOPDIR}
 
 cd ${TOPDIR}

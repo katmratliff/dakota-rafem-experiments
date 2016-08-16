@@ -3,25 +3,27 @@
 ##PBS -N dakota_rafem_cem
 
 ## Send email when the job is aborted, started, or stopped
-#PBS -m abe
+##PBS -m abe
 
 ## Send email here
 ##PBS -M k.ratliff@duke.edu
 
 export MPI=/opt/openmpi
 export DAKOTA=/usr/local/dakota
-PBSDCP=/home/csdms/tools/pbstools/0.1/bin/pbsdcp
+export PBSDCP=/home/csdms/tools/pbstools/0.1
 
-export PATH=$DAKOTA/bin:$MPI/bin:$PATH
+CP=${PBSDCP}/bin/pbsdcp
+
+export PATH=$PBSDCP/bin:$DAKOTA/bin:$MPI/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DAKOTA/bin:$DAKOTA/lib
 
 OUTPUT_DIR=/scratch/kara5380/${PBS_JOBNAME}.${PBS_JOBID}
 
 echo "Copy input to compute node..."
-cd ${TMPDIR} && $PBSDCP -r ${PBS_O_WORKDIR}/* .
+cd ${TMPDIR} && ${CP} -r ${PBS_O_WORKDIR}/* .
 
 echo "Run Dakota on in the temporary location."
 cd ${TMPDIR} && $DAKOTA/bin/dakota -i dakota.in
 
 echo "Copy everything back to the head node."
-mkdir -p ${OUTPUT_DIR} && cp -r ${TMPDIR} ${OUTPUT_DIR}
+mkdir -p ${OUTPUT_DIR} && ${CP} -r ${TMPDIR} ${OUTPUT_DIR}
