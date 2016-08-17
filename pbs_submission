@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -l nodes=2:ppn=8
-##PBS -N dakota_rafem_cem
+#PBS -N dakota_rafem_cem
 
 ## Send email when the job is aborted, started, or stopped
 ##PBS -m abe

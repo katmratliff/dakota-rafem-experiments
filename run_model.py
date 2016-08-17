@@ -7,7 +7,7 @@ import numpy as np
 import inspect, os
 #from rafem.riverbmi import BmiRiverModule
 
-N_DAYS = 50
+N_DAYS = 10
 Save_Daily_Timesteps = 1
 Save_Yearly_Timesteps = 0
 Save_Fluxes = 1
