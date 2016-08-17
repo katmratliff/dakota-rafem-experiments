@@ -23,11 +23,6 @@ mkdir ${workdir}.stage && cd ${workdir}.stage
 cp ${TOPDIR}/${params_file} ${workdir}.stage
 dprepro ${params_file} ${TOPDIR}/run_model.py ${workdir}.stage/run_model.py
 
-echo WORKDIR IS ${workdir}
-echo $(ls $workdir)
-echo WORKDIR.STAGE IS ${workdir}.stage
-echo $(ls ${workdir}.stage)
-
 host_num=$(( (sim_id - 1) % N_PROCS + 1))
 sed -n "${host_num}p" $PBS_NODEFILE > machinefile
 
@@ -35,7 +30,7 @@ ${CP} -r ${workdir}.stage ${workdir} && rm -rf ${workdir}.stage
 
 RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python ${workdir}/run_model.py ${workdir}/$results_file"
 
-cd ${TMPDIR} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
+cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
 
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
 # ${CP} -g ${workdir}/$results_file ${TOPDIR}
