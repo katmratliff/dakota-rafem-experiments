@@ -17,7 +17,7 @@ MPIRUN=/opt/openmpi/bin/mpirun
 N_PROCS=$PBS_NP
 
 # Stage the simulation in the workdir
-workdir=${TOPDIR}/xim.${sim_id}
+workdir=${TMPDIR}/xim.${sim_id}
 
 mkdir ${workdir}.stage && cd ${workdir}.stage
 cp ${TOPDIR}/${params_file} ${workdir}.stage
