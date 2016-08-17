@@ -23,6 +23,11 @@ mkdir ${workdir}.stage && cd ${workdir}.stage
 cp ${TOPDIR}/${params_file} ${workdir}.stage
 dprepro ${params_file} ${TOPDIR}/run_model.py ${workdir}.stage/run_model.py
 
+echo WORKDIR IS ${workdir}
+echo $(ls $workdir)
+echo WORKDIR.STAGE IS ${workdir}.stage
+echo $(ls ${workdir}.stage)
+
 host_num=$(( (sim_id - 1) % N_PROCS + 1))
 sed -n "${host_num}p" $PBS_NODEFILE > machinefile
 
