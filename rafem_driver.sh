@@ -8,9 +8,9 @@ sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[
 
 TOPDIR=$(pwd)
 
-echo RUNNING IN $TOPDIR
-echo TMPDIR IS $TMPDIR
-echo $(ls $TMPDIR)
+# echo RUNNING IN $TOPDIR
+# echo TMPDIR IS $TMPDIR
+# echo $(ls $TMPDIR)
 
 CP=/home/csdms/tools/pbstools/0.1/bin/pbsdcp 
 MPIRUN=/opt/openmpi/bin/mpirun
@@ -34,6 +34,12 @@ cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICAT
 
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
 # ${CP} -g ${workdir}/$results_file ${TOPDIR}
-# cp ${workdir}/$results_file ${TOPDIR}
+
+echo TMPDIR IS $TMPDIR
+echo TOPDIR IS $TOPDIR
+echo WORKDIR IS ${workdir}
+echo $(ls $workdir)
+
+#cp -r ${workdir}/. ${TOPDIR}
 
 cd ${TOPDIR}
