@@ -40,6 +40,6 @@ echo TOPDIR IS $TOPDIR
 echo WORKDIR IS ${workdir}
 echo $(ls $workdir)
 
-#cp -r ${workdir}/. ${TOPDIR}
+scp -rf ${workdir}/. ${TOPDIR}/xim.${sim_id}
 
 cd ${TOPDIR}
