@@ -14,7 +14,7 @@ OUTPUT_DIR=/scratch/kara5380/${PBS_JOBNAME}.${PBS_JOBID}
 # echo TMPDIR IS $TMPDIR
 # echo $(ls $TMPDIR)
 
-CP=/home/csdms/tools/pbstools/src/pbstools-2.0/bin/pbsdcp
+CP=/home/csdms/tools/pbstools/3.1/pbstools-3.1/bin/pbsdcp
 MPIRUN=/opt/openmpi/bin/mpirun
 N_PROCS=$PBS_NP
 
