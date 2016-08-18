@@ -10,7 +10,7 @@
 
 export MPI=/opt/openmpi
 export DAKOTA=/usr/local/dakota
-export PBSDCP=/home/csdms/tools/pbstools/0.1
+export PBSDCP=/home/csdms/tools/pbstools/3.1/pbstools-3.1
 
 CP=${PBSDCP}/bin/pbsdcp
 
