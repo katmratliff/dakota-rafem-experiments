@@ -14,7 +14,7 @@ OUTPUT_DIR=/scratch/kara5380/${PBS_JOBNAME}.${PBS_JOBID}
 # echo TMPDIR IS $TMPDIR
 # echo $(ls $TMPDIR)
 
-CP=/home/csdms/tools/pbstools/3.1/pbstools-3.1/bin/pbsdcp
+CP=/home/csdms/tools/pbstools/0.1/bin/pbsdcp 
 MPIRUN=/opt/openmpi/bin/mpirun
 N_PROCS=$PBS_NP
 
@@ -35,7 +35,7 @@ RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python ${workdir}/run_model.p
 cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
 
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
-${CP} -g ${workdir} ${TOPDIR}
+# ${CP} -g ${workdir} ${TOPDIR}
 
 # echo TMPDIR IS $TMPDIR
 # echo TOPDIR IS $TOPDIR
@@ -44,6 +44,6 @@ ${CP} -g ${workdir} ${TOPDIR}
 
 # scp -rf ${workdir}/. ${TOPDIR}/xim.${sim_id}
 
-# rsync -az ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
+rsync -avz ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
 
 cd ${TOPDIR}
