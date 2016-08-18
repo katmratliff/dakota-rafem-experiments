@@ -33,13 +33,13 @@ RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python ${workdir}/run_model.p
 cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
 
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
-# ${CP} -g ${workdir}/$results_file ${TOPDIR}
+${CP} -g ${workdir} ${TOPDIR}
 
-echo TMPDIR IS $TMPDIR
-echo TOPDIR IS $TOPDIR
-echo WORKDIR IS ${workdir}
-echo $(ls $workdir)
+# echo TMPDIR IS $TMPDIR
+# echo TOPDIR IS $TOPDIR
+# echo WORKDIR IS ${workdir}
+# echo $(ls $workdir)
 
-scp -rf ${workdir}/. ${TOPDIR}/xim.${sim_id}
+# scp -rf ${workdir}/. ${TOPDIR}/xim.${sim_id}
 
 cd ${TOPDIR}
