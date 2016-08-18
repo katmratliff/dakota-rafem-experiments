@@ -8,6 +8,8 @@ sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[
 
 TOPDIR=$(pwd)
 
+OUTPUT_DIR=/scratch/kara5380/${PBS_JOBNAME}.${PBS_JOBID}
+
 # echo RUNNING IN $TOPDIR
 # echo TMPDIR IS $TMPDIR
 # echo $(ls $TMPDIR)
@@ -33,7 +35,7 @@ RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python ${workdir}/run_model.p
 cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
 
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
-${CP} -g ${workdir} ${TOPDIR}
+# ${CP} -g ${workdir} ${TOPDIR}
 
 # echo TMPDIR IS $TMPDIR
 # echo TOPDIR IS $TOPDIR
@@ -41,5 +43,7 @@ ${CP} -g ${workdir} ${TOPDIR}
 # echo $(ls $workdir)
 
 # scp -rf ${workdir}/. ${TOPDIR}/xim.${sim_id}
+
+rsync -avz ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
 
 cd ${TOPDIR}
