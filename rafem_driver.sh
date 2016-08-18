@@ -42,8 +42,8 @@ cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICAT
 # echo WORKDIR IS ${workdir}
 # echo $(ls $workdir)
 
-# scp -rf ${workdir}/. ${TOPDIR}/xim.${sim_id}
+scp -rf ${workdir} ${TOPDIR}
 
-rsync -avz ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
+# rsync -avz ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
 
 cd ${TOPDIR}
