@@ -42,7 +42,9 @@ cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICAT
 # echo WORKDIR IS ${workdir}
 # echo $(ls $workdir)
 
-scp -rf ${workdir} ${TOPDIR}
+# scp -rf ${workdir} ${TOPDIR}
+
+cp -r ${workdir} ${OUTPUT_DIR}
 
 # rsync -avz ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
 
