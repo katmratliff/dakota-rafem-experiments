@@ -8,11 +8,7 @@ sim_id=$(echo $params_file | cut -d . -f 3) # params file is of form params.in.[
 
 TOPDIR=$(pwd)
 
-OUTPUT_DIR=/scratch/kara5380/${PBS_JOBNAME}.${PBS_JOBID}
-
-# echo RUNNING IN $TOPDIR
-# echo TMPDIR IS $TMPDIR
-# echo $(ls $TMPDIR)
+output_dir=/scratch/kara5380/${PBS_JOBID}
 
 CP=/home/csdms/tools/pbstools/0.1/bin/pbsdcp 
 MPIRUN=/opt/openmpi/bin/mpirun
@@ -37,15 +33,9 @@ cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICAT
 # This doesn't work right now. There's a problem with gather mode of pbsdcp.
 # ${CP} -g ${workdir} ${TOPDIR}
 
-# echo TMPDIR IS $TMPDIR
-# echo TOPDIR IS $TOPDIR
-# echo WORKDIR IS ${workdir}
-# echo $(ls $workdir)
+node=$(cat ${workdir}/machinefile)
+mkdir -p $output_dir
 
-# scp -rf ${workdir} ${TOPDIR}
-
-cp -r ${workdir} ${OUTPUT_DIR}
-
-# rsync -avz ${workdir} kara5380@beach.colorado.edu:/${OUTPUT_DIR}
+scp -r $node:${workdir} $output_dir
 
 cd ${TOPDIR}
