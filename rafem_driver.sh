@@ -30,12 +30,18 @@ RUN_APPLICATION="/home/kara5380/py-csdms/conda/bin/python ${workdir}/run_model.p
 
 cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICATION
 
-# This doesn't work right now. There's a problem with gather mode of pbsdcp.
-# ${CP} -g ${workdir} ${TOPDIR}
-
 node=$(cat ${workdir}/machinefile)
 mkdir -p $output_dir
 
 scp -r $node:${workdir} $output_dir
 
+echo NODE IS $node
+echo TMPDIR IS $TMPDIR
+echo $(ls $TMPDIR)
+echo PBS_O_WORKDIR IS $PBS_O_WORKDIR
+echo $(ls $PBS_O_WORKDIR)
+
+scp $node:${workdir}/$results_file ${PBS_O_WORKDIR}
+
 cd ${TOPDIR}
+
