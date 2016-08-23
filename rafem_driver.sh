@@ -41,7 +41,7 @@ echo $(ls $TMPDIR)
 echo PBS_O_WORKDIR IS $PBS_O_WORKDIR
 echo $(ls $PBS_O_WORKDIR)
 
-scp $node:${workdir}/$results_file ${PBS_O_WORKDIR}
-
+scp $node:${workdir}/$results_file ${TMPDIR}
+# or could be $PBS_O_WORKDIR and then cd $PBS_O_WORKDIR
 cd ${TOPDIR}
 
