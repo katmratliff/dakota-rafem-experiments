@@ -3,10 +3,10 @@
 #PBS -N dakota_rafem_cem
 
 ## Send email when the job is aborted, started, or stopped
-##PBS -m abe
+#PBS -m abe
 
 ## Send email here
-##PBS -M k.ratliff@duke.edu
+#PBS -M k.ratliff@duke.edu
 
 export MPI=/opt/openmpi
 export DAKOTA=/usr/local/dakota
@@ -26,4 +26,5 @@ echo "Run Dakota on in the temporary location."
 cd ${TMPDIR} && $DAKOTA/bin/dakota -i dakota.in
 
 echo "Copy everything back to the head node."
+##scp ${TMPDIR}/* ${OUTPUT_DIR}
 scp ${PBS_O_WORKDIR}/* ${OUTPUT_DIR}
