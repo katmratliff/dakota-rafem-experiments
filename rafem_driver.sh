@@ -33,14 +33,10 @@ cd ${workdir} && $MPIRUN -np 1 -machinefile ${workdir}/machinefile $RUN_APPLICAT
 node=$(cat ${workdir}/machinefile)
 mkdir -p $output_dir
 
+# copy model output to output directory
 scp -r $node:${workdir} $output_dir
 
-echo NODE IS $node
-echo TMPDIR IS $TMPDIR
-echo $(ls $TMPDIR)
-echo PBS_O_WORKDIR IS $PBS_O_WORKDIR
-echo $(ls $PBS_O_WORKDIR)
-
+# copy results file back for dakota
 scp $node:${workdir}/$results_file ${TMPDIR}
 
 cd ${TOPDIR}

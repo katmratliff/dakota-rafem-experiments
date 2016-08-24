@@ -27,4 +27,3 @@ cd ${TMPDIR} && $DAKOTA/bin/dakota -i dakota.in
 
 echo "Copy everything back to the head node."
 scp ${TMPDIR}/* ${OUTPUT_DIR}
-##scp ${PBS_O_WORKDIR}/* ${OUTPUT_DIR}
