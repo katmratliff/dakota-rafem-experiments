@@ -17,7 +17,7 @@ interface
 	  asynchronous 
 
 	  # this must agree with the qsub and driver script files
-	  evaluation_concurrency = 16
+	  evaluation_concurrency = 64
 
 	analysis_driver = 'rafem_driver.sh'
   parameters_file = 'params.in'
