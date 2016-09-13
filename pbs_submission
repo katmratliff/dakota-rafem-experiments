@@ -1,5 +1,6 @@
 #!/bin/bash
 #PBS -l nodes=4:ppn=8
+#PBS -l walltime=2376:00:00
 #PBS -N dakota_rafem_cem
 
 ## Send email when the job is aborted, started, or stopped
