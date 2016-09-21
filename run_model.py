@@ -7,8 +7,8 @@ import numpy as np
 import inspect, os
 #from rafem.riverbmi import BmiRiverModule
 
-N_DAYS = 3000
-Save_Daily_Timesteps = 1
+N_DAYS = 10000
+Save_Daily_Timesteps = 0
 Save_Yearly_Timesteps = 0
 Save_Fluxes = 1
 save_int = 1  # (in days)
@@ -41,7 +41,7 @@ waves = Waves()
 
 cem.setup('_run_cem', number_of_cols=200, number_of_rows=120, grid_spacing=100.)
 raf.setup('_run_rafem', number_of_columns=200, number_of_rows=120, row_spacing=0.1,
-          column_spacing=0.1, random_seed=824, rate_of_sea_level_rise=0.00,
+          column_spacing=0.1, random_seed=921, rate_of_sea_level_rise=0.00,
           channel_discharge=10., upstream_elevation=5.)
 
 cem.initialize('_run_cem/cem.txt')
