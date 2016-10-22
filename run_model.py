@@ -7,11 +7,13 @@ import numpy as np
 import inspect, os
 #from rafem.riverbmi import BmiRiverModule
 
-N_DAYS = 10000
-Save_Daily_Timesteps = 0
+N_DAYS = 365 * 1000
+Save_Daily_Timesteps = 1
 Save_Yearly_Timesteps = 0
-Save_Fluxes = 1
-save_int = 1  # (in days)
+Save_Figs = 1
+Save_Arrays = 0
+Save_Fluxes = 0
+save_int = 365*100  # (in days)
 
 def plot_coast(spacing, z):
     import matplotlib.pyplot as plt
@@ -41,7 +43,7 @@ waves = Waves()
 
 cem.setup('_run_cem', number_of_cols=200, number_of_rows=120, grid_spacing=100.)
 raf.setup('_run_rafem', number_of_columns=200, number_of_rows=120, row_spacing=0.1,
-          column_spacing=0.1, random_seed=922, rate_of_sea_level_rise=0.00,
+          column_spacing=0.1, random_seed=1022, rate_of_sea_level_rise=0.00,
           channel_discharge=10., upstream_elevation=5.)
 
 cem.initialize('_run_cem/cem.txt')
@@ -57,7 +59,7 @@ cem.set_value('land_surface__elevation', z)
 waves.set_value('sea_shoreline_wave~incoming~deepwater__ashton_et_al_approach_angle_asymmetry_parameter', .5)
 waves.set_value('sea_shoreline_wave~incoming~deepwater__ashton_et_al_approach_angle_highness_parameter', {U})
 cem.set_value("sea_surface_water_wave__height", {H})
-cem.set_value("sea_surface_water_wave__period", 9.)
+cem.set_value("sea_surface_water_wave__period", 7.)
 
 ### set CEM wave angle if not updating waves ###
 #cem.set_value("sea_surface_water_wave__azimuth_angle_of_opposite_of_phase_velocity", 0. * np.pi / 180.)
@@ -198,58 +200,62 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
         ##########################################################################################
         if Save_Daily_Timesteps == 1:
 
-            # np.savetxt('output_data_waves/elev_grid/elev_'+str("%.3f" % nyears)+'.out',z,fmt='%.5f')
-            np.savetxt('output_data_waves/rel_elev/rel_elev_'+str("%i" % time)+'.out',rel_z,fmt='%.5f')
-            np.savetxt('output_data_waves/riv_course/riv_'+str("%i" % time)+'.out',zip(x,y),fmt='%i')
-            # np.savetxt('output_data_waves/riv_profile/prof_'+str("%i" % time)+'.out',real_prof,fmt='%.5f')
+            if Save_Arrays == 1: 
+                # np.savetxt('output_data_waves/elev_grid/elev_'+str("%.3f" % nyears)+'.out',z,fmt='%.5f')
+                np.savetxt('output_data_waves/rel_elev/rel_elev_'+str("%i" % time)+'.out',rel_z,fmt='%.5f')
+                np.savetxt('output_data_waves/riv_course/riv_'+str("%i" % time)+'.out',zip(x,y),fmt='%i')
+                # np.savetxt('output_data_waves/riv_profile/prof_'+str("%i" % time)+'.out',real_prof,fmt='%.5f')
 
-            # save figures
+
+            if Save_Figs == 1:
             f = plt.figure()
-            plot_coast(spacing, z - sea_level)
-            plt.plot(river_x, river_y, LineWidth=2.5)
-            plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')
-            plt.savefig('output_data_waves/elev_figs/elev_fig_'+str(int(time))+'.png')
-            plt.close(f)
+                plot_coast(spacing, z - sea_level)
+                plt.plot(river_x, river_y, LineWidth=2.5)
+                plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')
+                plt.savefig('output_data_waves/elev_figs/elev_fig_'+str(int(time))+'.png')
+                plt.close(f)
 
-            p = plt.figure()
-            PL, = plt.plot(riv_left, color=[0, 0.2, 0], linewidth=2)
-            SL = plt.hlines(sea_level, 0, 120, color='c', linewidth=1)
-            PP, = plt.plot(prof, color='b', linewidth=2)
-            PR, = plt.plot(riv_right, color=[0, 0.8, 0], linewidth=2, linestyle='dashed')
-            plt.legend((PL, PR, PP, SL),('adjacent floodplain left side',
-                        'adjacent floodplain right side', 'river bed', 
-                        'sea level'), fontsize=14, loc=('upper right'))
-            plt.axis([0, 120, -10, 20])
-            plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')
-            plt.xlabel('river cells')
-            plt.ylabel('channel depths')
-            plt.savefig('output_data_waves/prof_figs/prof_fig_'+str(int(time))+'.png')
-            plt.close(p)
+                p = plt.figure()
+                PL, = plt.plot(riv_left, color=[0, 0.2, 0], linewidth=2)
+                SL = plt.hlines(sea_level, 0, 120, color='c', linewidth=1)
+                PP, = plt.plot(prof, color='b', linewidth=2)
+                PR, = plt.plot(riv_right, color=[0, 0.8, 0], linewidth=2, linestyle='dashed')
+                plt.legend((PL, PR, PP, SL),('adjacent floodplain left side',
+                            'adjacent floodplain right side', 'river bed', 
+                            'sea level'), fontsize=14, loc=('upper right'))
+                plt.axis([0, 120, -10, 20])
+                plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')
+                plt.xlabel('river cells')
+                plt.ylabel('channel depths')
+                plt.savefig('output_data_waves/prof_figs/prof_fig_'+str(int(time))+'.png')
+                plt.close(p)
         ##########################################################################################
         
 
         ### SAVE YEARLY TIMESTEPS ###
         ##########################################################################################
         if Save_Yearly_Timesteps == 1:
-            # np.savetxt('output_data_waves/elev_grid/elev_'+str(time/save_int)+'.out',z,fmt='%.5f')
-            np.savetxt('output_data_waves/rel_elev/rel_elev_'+str(time/save_int)+'.out',rel_z,fmt='%.5f')
-            np.savetxt('output_data_waves/riv_course/riv_'+str(time/save_int)+'.out',zip(x,y),fmt='%i')
-            np.savetxt('output_data_waves/riv_profile/prof_'+str(time/save_int)+'.out',real_prof,fmt='%.5f')
 
-            # save figures
-            f = plt.figure()
-            plot_coast(spacing, z - sea_level)
-            plt.plot(river_y,river_x, linewidth=2)
-            plt.title('time = '+str(time/save_int)+' years, sea level = '+str("%.3f" % sea_level)+' m')
-            plt.savefig('output_data_waves/elev_figs/elev_fig_'+str(time/save_int)+'.png')
-            plt.close(f)
+            if Save_Arrays == 1: 
+                # np.savetxt('output_data_waves/elev_grid/elev_'+str(time/save_int)+'.out',z,fmt='%.5f')
+                np.savetxt('output_data_waves/rel_elev/rel_elev_'+str(time/save_int)+'.out',rel_z,fmt='%.5f')
+                np.savetxt('output_data_waves/riv_course/riv_'+str(time/save_int)+'.out',zip(x,y),fmt='%i')
+                np.savetxt('output_data_waves/riv_profile/prof_'+str(time/save_int)+'.out',real_prof,fmt='%.5f')
 
-            p = plt.figure()
-            plt.plot(prof)
-            plt.axis([0, 200, -20, 120])
-            plt.title('time = '+str(time/save_int)+' years')
-            plt.savefig('output_data_waves/prof_figs/prof_fig_'+str(time/save_int)+'.png')
-            plt.close(p)
+            if Save_Figs == 1:
+                f = plt.figure()
+                plot_coast(spacing, z - sea_level)
+                plt.plot(river_y,river_x, linewidth=2)
+                plt.title('time = '+str(time/save_int)+' years, sea level = '+str("%.3f" % sea_level)+' m')
+                plt.savefig('output_data_waves/elev_figs/elev_fig_'+str(time/save_int)+'.png')
+                plt.close(f)
+
+                p = plt.figure()
+                plt.plot(prof)
+                plt.axis([0, 200, -20, 120])
+                plt.title('time = '+str(time/save_int)+' years')
+                plt.savefig('output_data_waves/prof_figs/prof_fig_'+str(time/save_int)+'.png')
+                plt.close(p)
         ##########################################################################################
 
 np.savetxt(sys.argv[1], sea_level, fmt='%.5f')
