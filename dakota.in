@@ -4,20 +4,20 @@ environment
 
 method
   multidim_parameter_study
-    partitions = 7 9
+    partitions = 5 2
 
 variables
   continuous_design = 2
     descriptors     'U'       'H'
-    lower_bounds    0.1       0.1
-    upper_bounds    0.8       1.0
+    lower_bounds    0.2       0.1
+    upper_bounds    0.7       0.3
 
 interface
 	fork,
 	  asynchronous 
 
 	  # this must agree with the qsub and driver script files
-	  evaluation_concurrency = 32
+	  evaluation_concurrency = 18
 
 	analysis_driver = 'rafem_driver.sh'
   parameters_file = 'params.in'

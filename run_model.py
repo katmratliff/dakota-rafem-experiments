@@ -13,7 +13,8 @@ Save_Yearly_Timesteps = 0
 Save_Figs = 1
 Save_Arrays = 0
 Save_Fluxes = 0
-save_int = 365*100  # (in days)
+flux_int = 0      # days
+save_int = 365*100  # days
 
 def plot_coast(spacing, z):
     import matplotlib.pyplot as plt
@@ -122,9 +123,10 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
     y, x = raf.get_value('channel_exit__y_coordinate'), raf.get_value('channel_exit__x_coordinate')
     qs[int(y[0] / spacing[0]), int(x[0] / spacing[1])] = raf_qs[0] * RIVER_WIDTH * RHO_SED
 
-    if Save_Fluxes:
-        with open('output_data/fluxes.out','a') as file:
-            file.write("%.2f %.5f \n" % (time, raf_qs[0] * RIVER_WIDTH * RHO_SED))
+    # BELOW NEEDS FIXING - NOT SURE WHY \n not being recognized    
+    # if Save_Fluxes and (time % flux_int == 0):
+    #     with open('output_data/fluxes.out','a') as file:
+    #         file.write("%.2f %.5f \n" % (time, raf_qs[0] * RIVER_WIDTH * RHO_SED))
     
     cem.set_value('land_surface_water_sediment~bedload__mass_flow_rate', qs)
 
@@ -210,7 +212,7 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
 
 
             if Save_Figs == 1:
-            f = plt.figure()
+                f = plt.figure()
                 plot_coast(spacing, z - sea_level)
                 plt.plot(river_x, river_y, LineWidth=2.5)
                 plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')

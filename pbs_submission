@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -l nodes=4:ppn=8
+#PBS -l nodes=3:ppn=6
 #PBS -l walltime=2376:00:00
 #PBS -N dakota_rafem_cem
 
