@@ -9,7 +9,7 @@ import inspect, os
 
 N_DAYS = 365 * 1000
 Save_Daily_Timesteps = 1
-Save_Yearly_Timesteps = 0
+# Save_Yearly_Timesteps = 0
 Save_Figs = 1
 Save_Arrays = 0
 Save_Fluxes = 0
@@ -216,7 +216,7 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
                 plot_coast(spacing, z - sea_level)
                 plt.plot(river_x, river_y, LineWidth=2.5)
                 plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')
-                plt.savefig('output_data/elev_figs/elev_fig_'+str(int(time))+'.png')
+                plt.savefig('output_data/elev_figs/elev_fig_'+str(int(time)/save_int)+'.png')
                 plt.close(f)
 
                 p = plt.figure()
@@ -231,7 +231,7 @@ for time in np.arange(0, N_DAYS, TIME_STEP):
                 plt.title('time = '+str("%.3f" % Tcf_time)+' Tcf')
                 plt.xlabel('river cells')
                 plt.ylabel('channel depths')
-                plt.savefig('output_data/prof_figs/prof_fig_'+str(int(time))+'.png')
+                plt.savefig('output_data/prof_figs/prof_fig_'+str(int(time)/save_int)+'.png')
                 plt.close(p)
         ##########################################################################################
         
