@@ -13,17 +13,14 @@ the cluster (the comment lines starting with `#PBS`), sets the environment,
 and runs dakota in the work directory.
 
 `dakota.in`: The dakota input file. This is set up to run a parameter
-study of the heat model. The input parameters are the diffusivity
-constance (`alpha`) and the grid spacing (`dx`). The responses are the
-maximum and mean temperature of the surface at the end of the run.
+study of the coupled rafem-cem model. The input parameters are the wave
+climate diffusivity (`U`) and the wave height (`H`). The response is
+sea level at the end of the run.
 
-`heat_driver.sh`: Stage simulations for each parameter combination and
+`rafem_driver.sh`: Stage simulations for each parameter combination and
 run the model.
 
-`heat.py`: The model. This will be called with two arguments. The first is
-the input file and the second the output file. This script is written so
+`run-model.py`: Python script for running the coupled rafem-cem model.
+This will be called with two arguments. This will be called with the two
+arguments specified in the dakota input file. This script is written so
 that the output file is a dakota response file.
-
-`heat.yaml.template`: A template input file for the model. Values in curly
-braces are substituted with values from dakota parameter files. The
-substitution is done in `heat_driver.sh` with the `dprepro` command.
